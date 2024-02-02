@@ -5,17 +5,15 @@ namespace Task3_2
     abstract class ArrayBase
     {
         protected bool user;//способ ввода
-        protected int n;//длина массива
 
-        public ArrayBase(bool user, int n)
+        public ArrayBase(bool user)
         {
             this.user = user;
-            this.n = n;
         }
 
 
-        public abstract int[] UserCreate();
-        public abstract int[] RndCreate();
+        public abstract void UserCreate();
+        public abstract void RndCreate();
 
 
         public abstract decimal Average();
@@ -27,6 +25,7 @@ namespace Task3_2
     sealed class OneDimArray : ArrayBase
     {
         int[] array;
+        int n;
 
         public OneDimArray(bool user, int n) : base(user, n)
         {
@@ -40,27 +39,25 @@ namespace Task3_2
             }
         }
 
-        public override int[] UserCreate()
+        public override void UserCreate()
         {
-            int[] l = new int[n];
+            array = new int[n];
             for (int i = 0; i < n; i++)
             {
                 Console.WriteLine($"Введите элемент {i + 1}");
                 int d = int.Parse(Console.ReadLine());
-                l.SetValue(d, i);
+                array.SetValue(d, i);
             }
-            return l;
         }
-        public override int[] RndCreate()
+        public override void RndCreate()
         {
             Random rnd = new Random();
-            int[] mas = new int[n];
+            array = new int[n];
             for (int i = 0; i < n; i++)
             {
                 int r = rnd.Next(1, 200);
-                mas.SetValue(r, i);
+                array.SetValue(r, i);
             }
-            return mas;
         }
 
         public void DeleteAbs()
@@ -132,6 +129,76 @@ namespace Task3_2
     sealed class TwoDimArray : ArrayBase
     {
         int[,] array;
+        int n;
+        int c;
+
+
+        public TwoDimArray(bool user, int n, int c) : base(user, n, c)
+        {
+            if(user == true){
+                array = UserCreate();
+            }
+            else
+            {
+                array = RndCreate();
+            }
+        }
+
+        public override void UserCreate()
+        {
+            array = new int[n , c];
+            for (int i = 0; i < n; i++)
+            {
+                for(int j = 0; j < c; j++)
+                {
+                    Console.WriteLine("Y: " + i + "X: " + j);
+                    array[i, j] = Convert.ToInt32(Console.ReadLine());
+                }
+            }
+        }
+        public override void RndCreate()
+        {
+            Random rnd = new Random();
+            array = new int[n, c];
+            for(int i = 0; i < n; i++)
+            {
+                for(int j = 0; j < c; j++)
+                {
+                    int r = rnd.Next(1, 200);
+                    array.SetValue(r, i, j);
+                }
+            }
+        }
+
+        public override decimal Average()
+        {
+            int[,] l = array;
+            decimal summ = 0;
+            decimal sred = 0;
+            for(int i = 0; i < n; i++)
+            {
+                for(int j = 0; j < c; j++)
+                {
+                    summ += array[i, j];
+                    int len = l.Length;
+                    sred = summ/len;
+                }
+            }
+            return sred;
+        }
+
+        public override void Print()
+        {
+            Console.WriteLine("Двухмерный массив: ");
+            for(int i = 0; i < n; i++)
+            {
+                for(int j = 0; j < c; j++)
+                {
+                    Console.WriteLine("Y: " + i + "X: " + j);
+                    array[i, j] = Convert.ToInt32(Console.ReadLine());
+                }
+            }
+        }
 
 
     }
